@@ -14,13 +14,17 @@
 @interface ViewController ()<MKMapViewDelegate, CLLocationManagerDelegate>
 @property (nonatomic, weak) IBOutlet MKMapView *mapView;
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) MKCircle *userCircle;
 @end
+
+#define USERCIRCLE_RADIUS 1000
 
 @implementation ViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.mapView.delegate = self;
     
     // 定位到深圳
     CLLocationCoordinate2D shenZhenCoordinate = CLLocationCoordinate2DMake(22.545136, 113.962273);
@@ -39,6 +43,7 @@
         [annotations addObject:pointAnnotation];
     }
     [self.mapView addAnnotations:annotations];
+    
     self.mapView.showsUserLocation = YES;
     
     // 定位用户位置
@@ -48,30 +53,43 @@
         self.locationManager.delegate = self;
         
         self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-        self.locationManager.distanceFilter = 1000;
+        self.locationManager.distanceFilter = kCLDistanceFilterNone;
         [self.locationManager startUpdatingLocation];
         [self.locationManager startUpdatingHeading];
     }
+    
+    // 为用户位置添加一个圆形的Overlay
+    self.userCircle = [MKCircle circleWithCenterCoordinate:self.mapView.userLocation.coordinate radius:USERCIRCLE_RADIUS];
+    [self.mapView addOverlay:self.userCircle];
 }
 
 #pragma mark -
 #pragma mark MapViewDelegate
-
-
-
-
-
-
-
-
-
+- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id<MKOverlay>)overlay
+{
+    if ([overlay isKindOfClass:[MKCircle class]]) {
+        MKCircleView *circleView = [[MKCircleView alloc] initWithCircle:overlay];
+        circleView.lineWidth = 1;
+        circleView.strokeColor = [UIColor blueColor];
+        circleView.fillColor = [UIColor orangeColor];
+        circleView.alpha = 0.3;
+        return circleView;
+    }
+    return nil;
+}
 
 #pragma mark LocationManagerDelegate
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     CLLocation *latestLocation = [locations lastObject];
+    NSLog(@"locations count:%d", [locations count]);
     NSLog(@"移动到了 latitude:%f, longitude:%f", latestLocation.coordinate.latitude, latestLocation.coordinate.longitude);
     
+    [self.mapView removeOverlay:self.userCircle];
+    MKCircle *circle = [MKCircle circleWithCenterCoordinate:latestLocation.coordinate radius:USERCIRCLE_RADIUS];
+    [self.mapView addOverlay:circle];
+    self.userCircle = circle;
+
     // 定位所在城市
     CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
     [geoCoder reverseGeocodeLocation:latestLocation completionHandler:^(NSArray *placeMarks, NSError *error){
