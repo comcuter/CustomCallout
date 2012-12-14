@@ -18,6 +18,10 @@
 		845110AD167B08AB004BF287 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 845110AC167B08AB004BF287 /* Default-568h@2x.png */; };
 		845110B0167B08AB004BF287 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 845110AE167B08AB004BF287 /* MainStoryboard.storyboard */; };
 		845110B3167B08AB004BF287 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 845110B2167B08AB004BF287 /* ViewController.m */; };
+		845110BA167B0A40004BF287 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845110B9167B0A40004BF287 /* MapKit.framework */; };
+		845110BC167B0A46004BF287 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845110BB167B0A46004BF287 /* CoreLocation.framework */; };
+		845110BE167B0A4D004BF287 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845110BD167B0A4D004BF287 /* AddressBook.framework */; };
+		845110C2167B1829004BF287 /* userLocation.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 845110C1167B1829004BF287 /* userLocation.gpx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +41,10 @@
 		845110AF167B08AB004BF287 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		845110B1167B08AB004BF287 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		845110B2167B08AB004BF287 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		845110B9167B0A40004BF287 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		845110BB167B0A46004BF287 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		845110BD167B0A4D004BF287 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		845110C1167B1829004BF287 /* userLocation.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = userLocation.gpx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +52,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				845110BE167B0A4D004BF287 /* AddressBook.framework in Frameworks */,
+				845110BC167B0A46004BF287 /* CoreLocation.framework in Frameworks */,
+				845110BA167B0A40004BF287 /* MapKit.framework in Frameworks */,
 				84511097167B08AB004BF287 /* UIKit.framework in Frameworks */,
 				84511099167B08AB004BF287 /* Foundation.framework in Frameworks */,
 				8451109B167B08AB004BF287 /* CoreGraphics.framework in Frameworks */,
@@ -73,6 +84,9 @@
 		84511095167B08AB004BF287 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				845110BD167B0A4D004BF287 /* AddressBook.framework */,
+				845110BB167B0A46004BF287 /* CoreLocation.framework */,
+				845110B9167B0A40004BF287 /* MapKit.framework */,
 				84511096167B08AB004BF287 /* UIKit.framework */,
 				84511098167B08AB004BF287 /* Foundation.framework */,
 				8451109A167B08AB004BF287 /* CoreGraphics.framework */,
@@ -88,6 +102,7 @@
 				845110AE167B08AB004BF287 /* MainStoryboard.storyboard */,
 				845110B1167B08AB004BF287 /* ViewController.h */,
 				845110B2167B08AB004BF287 /* ViewController.m */,
+				845110C1167B1829004BF287 /* userLocation.gpx */,
 				8451109D167B08AB004BF287 /* Supporting Files */,
 			);
 			path = CustomCallout;
@@ -163,6 +178,7 @@
 				845110AB167B08AB004BF287 /* Default@2x.png in Resources */,
 				845110AD167B08AB004BF287 /* Default-568h@2x.png in Resources */,
 				845110B0167B08AB004BF287 /* MainStoryboard.storyboard in Resources */,
+				845110C2167B1829004BF287 /* userLocation.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
