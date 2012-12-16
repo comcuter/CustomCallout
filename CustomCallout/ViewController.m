@@ -7,6 +7,8 @@
 //
 
 #import "ViewController.h"
+#import "CMUserCircle.h"
+#import "CMUserCircleView.h"
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AddressBook/AddressBook.h>
@@ -14,7 +16,9 @@
 @interface ViewController ()<MKMapViewDelegate, CLLocationManagerDelegate>
 @property (nonatomic, weak) IBOutlet MKMapView *mapView;
 @property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, strong) MKCircle *userCircle;
+
+@property (nonatomic, strong) CMUserCircle *userCircle;
+@property (nonatomic, strong) CMUserCircleView *userCircleView;
 @end
 
 #define USERCIRCLE_RADIUS 1000
@@ -45,35 +49,32 @@
     [self.mapView addAnnotations:annotations];
     
     self.mapView.showsUserLocation = YES;
-    
     // 定位用户位置
     if ([CLLocationManager locationServicesEnabled]) {
         NSLog(@"可以进行定位");
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
         self.locationManager.distanceFilter = kCLDistanceFilterNone;
         [self.locationManager startUpdatingLocation];
-        [self.locationManager startUpdatingHeading];
+        
     }
-    
-    // 为用户位置添加一个圆形的Overlay
-    self.userCircle = [MKCircle circleWithCenterCoordinate:self.mapView.userLocation.coordinate radius:USERCIRCLE_RADIUS];
-    [self.mapView addOverlay:self.userCircle];
 }
 
 #pragma mark -
 #pragma mark MapViewDelegate
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id<MKOverlay>)overlay
 {
-    if ([overlay isKindOfClass:[MKCircle class]]) {
-        MKCircleView *circleView = [[MKCircleView alloc] initWithCircle:overlay];
-        circleView.lineWidth = 1;
-        circleView.strokeColor = [UIColor blueColor];
-        circleView.fillColor = [UIColor orangeColor];
-        circleView.alpha = 0.3;
-        return circleView;
+    if ([overlay isKindOfClass:[CMUserCircle class]]) {
+        if (self.userCircleView == nil) {
+            self.userCircleView = [[CMUserCircleView alloc] initWithOverlay:overlay];
+            self.userCircleView.lineWidth = 1;
+            self.userCircleView.strokeColor = [UIColor blueColor];
+            self.userCircleView.fillColor = [UIColor orangeColor];
+            self.userCircleView.alpha = 0.3;
+        }
+        return self.userCircleView;
     }
     return nil;
 }
@@ -82,13 +83,15 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     CLLocation *latestLocation = [locations lastObject];
-    NSLog(@"locations count:%d", [locations count]);
     NSLog(@"移动到了 latitude:%f, longitude:%f", latestLocation.coordinate.latitude, latestLocation.coordinate.longitude);
     
-    [self.mapView removeOverlay:self.userCircle];
-    MKCircle *circle = [MKCircle circleWithCenterCoordinate:latestLocation.coordinate radius:USERCIRCLE_RADIUS];
-    [self.mapView addOverlay:circle];
-    self.userCircle = circle;
+    // 如果是第一次更新位置，则创建一个overlay.
+    if (self.userCircle == nil) {
+        self.userCircle = [[CMUserCircle alloc] initWithCenterCoordinate:latestLocation.coordinate radius:USERCIRCLE_RADIUS];
+        [self.mapView addOverlay:self.userCircle];
+    }
+    self.userCircle.coordinate = latestLocation.coordinate;
+    [self.userCircleView invalidatePath];
 
     // 定位所在城市
     CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
@@ -99,8 +102,8 @@
             return;
         }
         
-        CLPlacemark *placeMark = [placeMarks lastObject];
-        NSLog(@"定位到了 %@ 省, %@ 市, %@ 区, %@ 路, %@ 号", placeMark.administrativeArea, placeMark.locality, placeMark.subLocality, placeMark.thoroughfare, placeMark.subThoroughfare);
+        // CLPlacemark *placeMark = [placeMarks lastObject];
+        // NSLog(@"定位到了 %@ 省, %@ 市, %@ 区, %@ 路, %@ 号", placeMark.administrativeArea, placeMark.locality, placeMark.subLocality, placeMark.thoroughfare, placeMark.subThoroughfare);
         
 //        NSDictionary *addressDic = placeMark.addressDictionary;
 //        NSLog(@"定位到了 %@ 省, %@ 市, %@ 路", [addressDic objectForKey:(NSString *)kABPersonAddressStateKey],
@@ -131,5 +134,4 @@
     [self.locationManager stopUpdatingLocation];
     [self.locationManager stopUpdatingHeading];
 }
-
 @end
