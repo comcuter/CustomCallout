@@ -191,6 +191,11 @@
     NSLog(@"用户所在城市: %@", cityName);
 }
 
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    NSLog(@"请求失败 %@", [error localizedDescription]);
+}
+
 #pragma mark -
 - (void)viewWillDisappear:(BOOL)animated
 {
