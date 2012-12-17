@@ -13,12 +13,14 @@
 #import <CoreLocation/CoreLocation.h>
 #import <AddressBook/AddressBook.h>
 
-@interface ViewController ()<MKMapViewDelegate, CLLocationManagerDelegate>
+@interface ViewController ()<MKMapViewDelegate, CLLocationManagerDelegate, NSURLConnectionDataDelegate>
 @property (nonatomic, weak) IBOutlet MKMapView *mapView;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
 @property (nonatomic, strong) CMMutableCircle *userCircle;
 @property (nonatomic, strong) CMMutableCircleView *userCircleView;
+
+@property (nonatomic, strong) NSMutableData *reverseGeoData;
 @end
 
 #define USERCIRCLE_RADIUS 1000
@@ -64,6 +66,7 @@
 
 #pragma mark -
 #pragma mark MapViewDelegate
+#pragma mark -
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id<MKOverlay>)overlay
 {
     if ([overlay isKindOfClass:[CMMutableCircle class]]) {
@@ -96,7 +99,9 @@
     [self.userCircleView invalidatePath];
 }
 
+#pragma mark -
 #pragma mark LocationManagerDelegate
+#pragma mark -
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     // 这里是演示locationManager怎么用.如果想要无偏移,应该将这部分也放到 mapView:didUpdateUserLocation: 里.
@@ -108,6 +113,8 @@
 // 确定用户位置
 - (void)locateUserCity:(CLLocation *)location
 {
+    // 第一种方式
+    // 使用 CLGeocoder 的话,会根据用户设置的 Local 的不同,返回不同的字符串,因此并不可靠.
     CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
     [geoCoder reverseGeocodeLocation:location completionHandler:^(NSArray *placeMarks, NSError *error){
         if (error != nil) {
@@ -122,6 +129,14 @@
         //        NSLog(@"定位到了 %@ 省, %@ 市, %@ 路", [addressDic objectForKey:(NSString *)kABPersonAddressStateKey],
         //              [addressDic objectForKey:(NSString *)kABPersonAddressCityKey], [addressDic objectForKey:(NSString *)kABPersonAddressStreetKey]);
     }];
+    
+    // 第二种方式
+    // 通过百度的 reverseGeocode Web API 来进行
+#define BAIDU_MAP_KEY @"1867400960779E7D273503F1383B6DDC20040E83"
+    NSString *requestURL= [NSString stringWithFormat:@"http://api.map.baidu.com/geocoder?location=%f,%f&output=json&key=%@",
+                           location.coordinate.latitude, location.coordinate.longitude, BAIDU_MAP_KEY];
+    NSURLRequest *urlRequest= [NSURLRequest requestWithURL:[NSURL URLWithString:requestURL] cachePolicy:NSURLRequestReloadRevalidatingCacheData timeoutInterval:60];
+    [NSURLConnection connectionWithRequest:urlRequest delegate:self];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
@@ -141,6 +156,42 @@
     }
 }
 
+#pragma mark -
+#pragma mark NSURLConnectionDataDelegate
+#pragma mark -
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    self.reverseGeoData = [[NSMutableData alloc] init];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    NSLog(@"接收到数据");
+    [self.reverseGeoData appendData:data];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+    NSLog(@"请求完毕");
+    NSError *error = nil;
+    NSDictionary *reverseDic = [NSJSONSerialization JSONObjectWithData:self.reverseGeoData options:kNilOptions error:&error];
+    
+    if (error != nil) {
+        NSLog(@"收到的数据不是JSON数据");
+        return;
+    }
+    
+    NSString *resultStatus = [reverseDic objectForKey:@"status"];
+    if (![resultStatus isEqualToString:@"OK"]) {
+        NSLog(@"请求失败,状态码:%@", resultStatus);
+        return;
+    }
+    
+    NSString *cityName = [reverseDic valueForKeyPath:@"result.addressComponent.city"];
+    NSLog(@"用户所在城市: %@", cityName);
+}
+
+#pragma mark -
 - (void)viewWillDisappear:(BOOL)animated
 {
     // 在适当的地方停止更新.
