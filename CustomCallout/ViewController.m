@@ -7,8 +7,8 @@
 //
 
 #import "ViewController.h"
-#import "CMUserCircle.h"
-#import "CMUserCircleView.h"
+#import "CMMutableCircle.h"
+#import "CMMutableCircleView.h"
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AddressBook/AddressBook.h>
@@ -17,8 +17,8 @@
 @property (nonatomic, weak) IBOutlet MKMapView *mapView;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
-@property (nonatomic, strong) CMUserCircle *userCircle;
-@property (nonatomic, strong) CMUserCircleView *userCircleView;
+@property (nonatomic, strong) CMMutableCircle *userCircle;
+@property (nonatomic, strong) CMMutableCircleView *userCircleView;
 @end
 
 #define USERCIRCLE_RADIUS 1000
@@ -49,7 +49,8 @@
     [self.mapView addAnnotations:annotations];
     
     self.mapView.showsUserLocation = YES;
-    // 定位用户位置
+    
+    // 初始化 CoreLocationManager.
     if ([CLLocationManager locationServicesEnabled]) {
         NSLog(@"可以进行定位");
         self.locationManager = [[CLLocationManager alloc] init];
@@ -58,7 +59,6 @@
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
         self.locationManager.distanceFilter = kCLDistanceFilterNone;
         [self.locationManager startUpdatingLocation];
-        
     }
 }
 
@@ -66,10 +66,10 @@
 #pragma mark MapViewDelegate
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id<MKOverlay>)overlay
 {
-    if ([overlay isKindOfClass:[CMUserCircle class]]) {
+    if ([overlay isKindOfClass:[CMMutableCircle class]]) {
         if (self.userCircleView == nil) {
-            self.userCircleView = [[CMUserCircleView alloc] initWithOverlay:overlay];
-            self.userCircleView.lineWidth = 1;
+            self.userCircleView = [[CMMutableCircleView alloc] initWithOverlay:overlay];
+            self.userCircleView.lineWidth = 2;
             self.userCircleView.strokeColor = [UIColor blueColor];
             self.userCircleView.fillColor = [UIColor orangeColor];
             self.userCircleView.alpha = 0.3;
@@ -79,35 +79,48 @@
     return nil;
 }
 
-#pragma mark LocationManagerDelegate
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+// 如果只使用用户位置的话,可以用这种方法解决偏移问题,但是 mapView 更新 userLocation 的速度比较慢.
+// 如果要使用 LocationManager 精度要求较高,就得自己纠偏了.
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    CLLocation *latestLocation = [locations lastObject];
-    NSLog(@"移动到了 latitude:%f, longitude:%f", latestLocation.coordinate.latitude, latestLocation.coordinate.longitude);
+    // 用户位置更新时,更新Overlay
+    CLLocation *latestLocation = userLocation.location;
+    NSLog(@"用户移动到了 %@", [NSString stringFromCLCoordinate:latestLocation.coordinate]);
     
-    // 如果是第一次更新位置，则创建一个overlay.
+    // 如果是第一次更新位置,则创建一个overlay
     if (self.userCircle == nil) {
-        self.userCircle = [[CMUserCircle alloc] initWithCenterCoordinate:latestLocation.coordinate radius:USERCIRCLE_RADIUS];
+        self.userCircle = [[CMMutableCircle alloc] initWithCenterCoordinate:latestLocation.coordinate radius:USERCIRCLE_RADIUS];
         [self.mapView addOverlay:self.userCircle];
     }
     self.userCircle.coordinate = latestLocation.coordinate;
     [self.userCircleView invalidatePath];
+}
 
+#pragma mark LocationManagerDelegate
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    // 这里是演示locationManager怎么用.如果想要无偏移,应该将这部分也放到 mapView:didUpdateUserLocation: 里.
+    CLLocation *latestLocation = self.mapView.userLocation.location;
     // 定位所在城市
+    [self locateUserCity:latestLocation];
+}
+
+// 确定用户位置
+- (void)locateUserCity:(CLLocation *)location
+{
     CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
-    [geoCoder reverseGeocodeLocation:latestLocation completionHandler:^(NSArray *placeMarks, NSError *error){
+    [geoCoder reverseGeocodeLocation:location completionHandler:^(NSArray *placeMarks, NSError *error){
         if (error != nil) {
-            NSLog(@"不能反地理编码,latitude:%f, longitude:%f, error:%@",
-                  latestLocation.coordinate.latitude, latestLocation.coordinate.longitude,[error localizedDescription]);
+            NSLog(@"不能反地理编码%@, error:%@",[NSString stringFromCLCoordinate:location.coordinate], [error localizedDescription]);
             return;
         }
         
         // CLPlacemark *placeMark = [placeMarks lastObject];
         // NSLog(@"定位到了 %@ 省, %@ 市, %@ 区, %@ 路, %@ 号", placeMark.administrativeArea, placeMark.locality, placeMark.subLocality, placeMark.thoroughfare, placeMark.subThoroughfare);
         
-//        NSDictionary *addressDic = placeMark.addressDictionary;
-//        NSLog(@"定位到了 %@ 省, %@ 市, %@ 路", [addressDic objectForKey:(NSString *)kABPersonAddressStateKey],
-//              [addressDic objectForKey:(NSString *)kABPersonAddressCityKey], [addressDic objectForKey:(NSString *)kABPersonAddressStreetKey]);
+        //        NSDictionary *addressDic = placeMark.addressDictionary;
+        //        NSLog(@"定位到了 %@ 省, %@ 市, %@ 路", [addressDic objectForKey:(NSString *)kABPersonAddressStateKey],
+        //              [addressDic objectForKey:(NSString *)kABPersonAddressCityKey], [addressDic objectForKey:(NSString *)kABPersonAddressStreetKey]);
     }];
 }
 

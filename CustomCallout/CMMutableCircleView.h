@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@interface CMUserCircleView : MKOverlayPathView
+@interface CMMutableCircleView : MKOverlayPathView
 
 @end

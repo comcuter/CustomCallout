@@ -9,5 +9,5 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 @interface NSString (Mapkit)
-+ (NSString *)stringFromCoordinate:(CLLocationCoordinate2D)coordinate;
++ (NSString *)stringFromCLCoordinate:(CLLocationCoordinate2D)coordinate;
 @end

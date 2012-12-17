@@ -6,14 +6,14 @@
 //  Copyright (c) 2012年 iboxpay. All rights reserved.
 //
 
-#import "CMUserCircleView.h"
-#import "CMUserCircle.h"
+#import "CMMutableCircleView.h"
+#import "CMMutableCircle.h"
 
-@implementation CMUserCircleView
+@implementation CMMutableCircleView
 
 - (void)createPath
 {
-    CMUserCircle *userCircle = (CMUserCircle *)self.overlay;
+    CMMutableCircle *userCircle = (CMMutableCircle *)self.overlay;
     MKMapPoint centerPoint = MKMapPointForCoordinate(userCircle.coordinate);
     CGPoint cgCenterPoint = [self pointForMapPoint:centerPoint];
     CGFloat cgRadius = MKMapPointsPerMeterAtLatitude(userCircle.coordinate.latitude) * userCircle.radius;

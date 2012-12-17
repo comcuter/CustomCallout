@@ -6,9 +6,9 @@
 //  Copyright (c) 2012年 iboxpay. All rights reserved.
 //
 
-#import "CMUserCircle.h"
+#import "CMMutableCircle.h"
 
-@implementation CMUserCircle
+@implementation CMMutableCircle
 @synthesize coordinate = _coordinate;
 @synthesize radius = _radius;
 @synthesize boundingMapRect = _boundingMapRect;

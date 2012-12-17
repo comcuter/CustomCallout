@@ -8,7 +8,7 @@
 
 #import <MapKit/MapKit.h>
 
-@interface CMUserCircle : NSObject<MKOverlay>
+@interface CMMutableCircle : NSObject<MKOverlay>
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 @property (nonatomic, assign) CLLocationDistance radius;
 @property (nonatomic, readonly) MKMapRect boundingMapRect;

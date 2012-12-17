@@ -9,7 +9,7 @@
 #import "NSString+Mapkit.h"
 
 @implementation NSString (Mapkit)
-+ (NSString *)stringFromCoordinate:(CLLocationCoordinate2D)coordinate
++ (NSString *)stringFromCLCoordinate:(CLLocationCoordinate2D)coordinate
 {
     return [NSString stringWithFormat:@"(%f, %f)", coordinate.latitude, coordinate.longitude];
 }
