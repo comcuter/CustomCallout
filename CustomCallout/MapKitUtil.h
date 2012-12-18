@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-@interface NSString (Mapkit)
-+ (NSString *)stringFromCLCoordinate:(CLLocationCoordinate2D)coordinate;
+
+extern NSString *NSStringFromCLLocationCoordinate2D(CLLocationCoordinate2D coordinate);
+
+@interface MapKitUtil
 @end

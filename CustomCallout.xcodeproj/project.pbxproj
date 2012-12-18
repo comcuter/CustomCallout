@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		1C93B441167DCD6C00E4B791 /* CMMutableCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C93B440167DCD6C00E4B791 /* CMMutableCircle.m */; };
 		1C93B444167DCEA200E4B791 /* CMMutableCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C93B443167DCEA200E4B791 /* CMMutableCircleView.m */; };
-		1C93B447167DD68000E4B791 /* NSString+Mapkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C93B446167DD68000E4B791 /* NSString+Mapkit.m */; };
+		1C93B447167DD68000E4B791 /* MapKitUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C93B446167DD68000E4B791 /* MapKitUtil.m */; };
 		84511097167B08AB004BF287 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84511096167B08AB004BF287 /* UIKit.framework */; };
 		84511099167B08AB004BF287 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84511098167B08AB004BF287 /* Foundation.framework */; };
 		8451109B167B08AB004BF287 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8451109A167B08AB004BF287 /* CoreGraphics.framework */; };
@@ -32,8 +32,8 @@
 		1C93B440167DCD6C00E4B791 /* CMMutableCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMMutableCircle.m; sourceTree = "<group>"; };
 		1C93B442167DCEA200E4B791 /* CMMutableCircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMMutableCircleView.h; sourceTree = "<group>"; };
 		1C93B443167DCEA200E4B791 /* CMMutableCircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMMutableCircleView.m; sourceTree = "<group>"; };
-		1C93B445167DD68000E4B791 /* NSString+Mapkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Mapkit.h"; sourceTree = "<group>"; };
-		1C93B446167DD68000E4B791 /* NSString+Mapkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Mapkit.m"; sourceTree = "<group>"; };
+		1C93B445167DD68000E4B791 /* MapKitUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapKitUtil.h; sourceTree = "<group>"; };
+		1C93B446167DD68000E4B791 /* MapKitUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapKitUtil.m; sourceTree = "<group>"; };
 		84511092167B08AB004BF287 /* CustomCallout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CustomCallout.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84511096167B08AB004BF287 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		84511098167B08AB004BF287 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -115,8 +115,8 @@
 				1C93B440167DCD6C00E4B791 /* CMMutableCircle.m */,
 				1C93B442167DCEA200E4B791 /* CMMutableCircleView.h */,
 				1C93B443167DCEA200E4B791 /* CMMutableCircleView.m */,
-				1C93B445167DD68000E4B791 /* NSString+Mapkit.h */,
-				1C93B446167DD68000E4B791 /* NSString+Mapkit.m */,
+				1C93B445167DD68000E4B791 /* MapKitUtil.h */,
+				1C93B446167DD68000E4B791 /* MapKitUtil.m */,
 				845110C1167B1829004BF287 /* userLocation.gpx */,
 				8451109D167B08AB004BF287 /* Supporting Files */,
 			);
@@ -209,7 +209,7 @@
 				845110B3167B08AB004BF287 /* ViewController.m in Sources */,
 				1C93B441167DCD6C00E4B791 /* CMMutableCircle.m in Sources */,
 				1C93B444167DCEA200E4B791 /* CMMutableCircleView.m in Sources */,
-				1C93B447167DD68000E4B791 /* NSString+Mapkit.m in Sources */,
+				1C93B447167DD68000E4B791 /* MapKitUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,7 +288,7 @@
 		845110B7167B08AB004BF287 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "CustomCallout/CustomCallout-Prefix.pch";
 				INFOPLIST_FILE = "CustomCallout/CustomCallout-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
@@ -300,7 +300,7 @@
 		845110B8167B08AB004BF287 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "CustomCallout/CustomCallout-Prefix.pch";
 				INFOPLIST_FILE = "CustomCallout/CustomCallout-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;

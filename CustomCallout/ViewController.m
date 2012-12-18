@@ -60,13 +60,11 @@
         
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
         self.locationManager.distanceFilter = kCLDistanceFilterNone;
-        [self.locationManager startUpdatingLocation];
+        //[self.locationManager startUpdatingLocation];
     }
 }
 
-#pragma mark -
-#pragma mark MapViewDelegate
-#pragma mark -
+#pragma mark - MapViewDelegate -
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id<MKOverlay>)overlay
 {
     if ([overlay isKindOfClass:[CMMutableCircle class]]) {
@@ -88,10 +86,11 @@
 {
     // 用户位置更新时,更新Overlay
     CLLocation *latestLocation = userLocation.location;
-    NSLog(@"用户移动到了 %@", [NSString stringFromCLCoordinate:latestLocation.coordinate]);
+    NSLog(@"用户移动到了 %@", NSStringFromCLLocationCoordinate2D(latestLocation.coordinate));
     
     // 如果是第一次更新位置,则创建一个overlay
     if (self.userCircle == nil) {
+        NSLog(@"初始化Overlay, 此时用户的位置是%@", NSStringFromCLLocationCoordinate2D(latestLocation.coordinate));
         self.userCircle = [[CMMutableCircle alloc] initWithCenterCoordinate:latestLocation.coordinate radius:USERCIRCLE_RADIUS];
         [self.mapView addOverlay:self.userCircle];
     }
@@ -99,9 +98,7 @@
     [self.userCircleView invalidatePath];
 }
 
-#pragma mark -
-#pragma mark LocationManagerDelegate
-#pragma mark -
+#pragma mark - LocationManagerDelegate -
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     // 这里是演示locationManager怎么用.如果想要无偏移,应该将这部分也放到 mapView:didUpdateUserLocation: 里.
@@ -118,7 +115,7 @@
     CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
     [geoCoder reverseGeocodeLocation:location completionHandler:^(NSArray *placeMarks, NSError *error){
         if (error != nil) {
-            NSLog(@"不能反地理编码%@, error:%@",[NSString stringFromCLCoordinate:location.coordinate], [error localizedDescription]);
+            NSLog(@"不能反地理编码%@, error:%@", NSStringFromCLLocationCoordinate2D(location.coordinate), [error localizedDescription]);
             return;
         }
         
@@ -156,9 +153,7 @@
     }
 }
 
-#pragma mark -
-#pragma mark NSURLConnectionDataDelegate
-#pragma mark -
+#pragma mark - NSURLConnectionDataDelegate -
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     self.reverseGeoData = [[NSMutableData alloc] init];
@@ -196,7 +191,7 @@
     NSLog(@"请求失败 %@", [error localizedDescription]);
 }
 
-#pragma mark -
+#pragma mark - viewController LifeCycle -
 - (void)viewWillDisappear:(BOOL)animated
 {
     // 在适当的地方停止更新.

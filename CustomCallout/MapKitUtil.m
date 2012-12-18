@@ -6,11 +6,12 @@
 //  Copyright (c) 2012年 iboxpay. All rights reserved.
 //
 
-#import "NSString+Mapkit.h"
+#import "MapKitUtil.h"
 
-@implementation NSString (Mapkit)
-+ (NSString *)stringFromCLCoordinate:(CLLocationCoordinate2D)coordinate
+NSString *NSStringFromCLLocationCoordinate2D(CLLocationCoordinate2D coordinate)
 {
     return [NSString stringWithFormat:@"(%f, %f)", coordinate.latitude, coordinate.longitude];
 }
+
+@implementation MapKitUtil
 @end
