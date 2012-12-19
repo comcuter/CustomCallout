@@ -14,6 +14,8 @@
 #import <AddressBook/AddressBook.h>
 #import "TicketPriceAnnotation.h"
 #import "TicketPriceAnnotationView.h"
+#import "TicketPriceCalloutAnnotation.h"
+#import "TicketPriceCalloutAnnotationView.h"
 
 @interface ViewController ()<MKMapViewDelegate, CLLocationManagerDelegate, NSURLConnectionDataDelegate>
 @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -23,6 +25,8 @@
 @property (nonatomic, strong) CMMutableCircleView *userCircleView;
 
 @property (nonatomic, strong) NSMutableData *reverseGeoData;
+
+@property (nonatomic, strong) NSArray *basicAnnotations;
 @end
 
 #define USERCIRCLE_RADIUS 1000
@@ -33,6 +37,7 @@
 {
     [super viewDidLoad];
     self.mapView.delegate = self;
+    self.mapView.showsUserLocation = YES;
     
     // 定位到深圳
     CLLocationCoordinate2D shenZhenCoordinate = CLLocationCoordinate2DMake(22.545136, 113.962273);
@@ -43,9 +48,7 @@
     // 添加几个点
     CLLocationCoordinate2D coordinates[] = {CLLocationCoordinate2DMake(22.548234, 113.939745),
                                             CLLocationCoordinate2DMake(22.544487, 113.945668),
-                                            CLLocationCoordinate2DMake(22.524781, 113.94386),
-                                            CLLocationCoordinate2DMake(22.546334, 113.939745),
-                                            CLLocationCoordinate2DMake(22.534487, 113.941111)};
+                                            CLLocationCoordinate2DMake(22.524781, 113.94386)};
     NSMutableArray *annotations = [NSMutableArray array];
     for (int i = 0; i < sizeof(coordinates) / sizeof(coordinates[0]); i++) {
         MKPointAnnotation *pointAnnotation = [[MKPointAnnotation alloc] init];
@@ -54,16 +57,21 @@
     }
     [self.mapView addAnnotations:annotations];
     
-    // 添加 PriceAnnotation
+    // 添加 PriceAnnotation 的点.
     CLLocationCoordinate2D priceCoordinates[] = { {22.546334, 113.939745}, {22.534487, 113.941111} };
+    NSMutableArray *basicAnnos = [NSMutableArray array]; // basic Annotations
     for (int i = 0; i < sizeof(priceCoordinates) / sizeof(priceCoordinates[0]); i++) {
         TicketPriceAnnotation *ticketAnnotation = [[TicketPriceAnnotation alloc] init];
         ticketAnnotation.coordinate = priceCoordinates[i];
         ticketAnnotation.price = i * 10;
-        [self.mapView addAnnotation:ticketAnnotation];
+        
+        // 设置其 callout annotation
+        TicketPriceCalloutAnnotation *calloutAnnotation = [[TicketPriceCalloutAnnotation alloc] initWithTicketPriceAnnotation:ticketAnnotation];
+        ticketAnnotation.calloutAnnotation = calloutAnnotation;
+        [basicAnnos addObject:ticketAnnotation];
     }
-    
-    self.mapView.showsUserLocation = YES;
+    self.basicAnnotations = basicAnnos;
+    [self.mapView addAnnotations:self.basicAnnotations];
     
     // 初始化 CoreLocationManager.
     if ([CLLocationManager locationServicesEnabled]) {
@@ -84,7 +92,7 @@
         return nil;
     }
     
-    if ([annotation isKindOfClass:[TicketPriceAnnotation class]]) {
+    if ([annotation isKindOfClass:[TicketPriceAnnotation class]]) { // 基本信息的 Annotation View
         static NSString *reuseIdentifier = @"TicketPriceView";
         TicketPriceAnnotationView *annotationView =
             (TicketPriceAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:reuseIdentifier];
@@ -93,6 +101,16 @@
         }
         annotationView.annotation = annotation;
         
+        return annotationView;
+    } else if ([annotation isKindOfClass:[TicketPriceCalloutAnnotation class]]) { // Callout 的 Annotation View
+        static NSString *reuseIdentifier = @"TicketPriceCalloutView";
+        TicketPriceCalloutAnnotationView *annotationView =
+        (TicketPriceCalloutAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:reuseIdentifier];
+        if (annotationView == nil) {
+            annotationView = [[TicketPriceCalloutAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
+        }
+        
+        annotationView.annotation = annotation;
         return annotationView;
     }
     
@@ -112,6 +130,28 @@
         return self.userCircleView;
     }
     return nil;
+}
+
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
+{
+    if ([view isKindOfClass:[TicketPriceAnnotationView class]]) {
+        TicketPriceAnnotation *annotation = (TicketPriceAnnotation *)view.annotation;
+        // 将其居中.
+        CLLocationCoordinate2D selectCoordinate = annotation.coordinate;
+        MKCoordinateRegion centerRegioin = MKCoordinateRegionMakeWithDistance(selectCoordinate, 1500, 1500);
+        [mapView setRegion:[mapView regionThatFits:centerRegioin] animated:YES];
+        
+        // 添加一个 callout annotation
+        [self.mapView addAnnotation:annotation.calloutAnnotation];
+    }
+}
+
+- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view
+{
+    if ([view isKindOfClass:[TicketPriceAnnotationView class]]) {
+        TicketPriceAnnotation *annotation = (TicketPriceAnnotation *)view.annotation;
+        [self.mapView removeAnnotation:annotation.calloutAnnotation];
+    }
 }
 
 // 如果只使用用户位置的话,可以用这种方法解决偏移问题,但是 mapView 更新 userLocation 的速度比较慢.
