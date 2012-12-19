@@ -12,6 +12,8 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AddressBook/AddressBook.h>
+#import "TicketPriceAnnotation.h"
+#import "TicketPriceAnnotationView.h"
 
 @interface ViewController ()<MKMapViewDelegate, CLLocationManagerDelegate, NSURLConnectionDataDelegate>
 @property (nonatomic, weak) IBOutlet MKMapView *mapView;
@@ -41,7 +43,9 @@
     // 添加几个点
     CLLocationCoordinate2D coordinates[] = {CLLocationCoordinate2DMake(22.548234, 113.939745),
                                             CLLocationCoordinate2DMake(22.544487, 113.945668),
-                                            CLLocationCoordinate2DMake(22.524781, 113.94386)};
+                                            CLLocationCoordinate2DMake(22.524781, 113.94386),
+                                            CLLocationCoordinate2DMake(22.546334, 113.939745),
+                                            CLLocationCoordinate2DMake(22.534487, 113.941111)};
     NSMutableArray *annotations = [NSMutableArray array];
     for (int i = 0; i < sizeof(coordinates) / sizeof(coordinates[0]); i++) {
         MKPointAnnotation *pointAnnotation = [[MKPointAnnotation alloc] init];
@@ -49,6 +53,15 @@
         [annotations addObject:pointAnnotation];
     }
     [self.mapView addAnnotations:annotations];
+    
+    // 添加 PriceAnnotation
+    CLLocationCoordinate2D priceCoordinates[] = { {22.546334, 113.939745}, {22.534487, 113.941111} };
+    for (int i = 0; i < sizeof(priceCoordinates) / sizeof(priceCoordinates[0]); i++) {
+        TicketPriceAnnotation *ticketAnnotation = [[TicketPriceAnnotation alloc] init];
+        ticketAnnotation.coordinate = priceCoordinates[i];
+        ticketAnnotation.price = i * 10;
+        [self.mapView addAnnotation:ticketAnnotation];
+    }
     
     self.mapView.showsUserLocation = YES;
     
@@ -65,6 +78,27 @@
 }
 
 #pragma mark - MapViewDelegate -
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
+{
+    if ([annotation isKindOfClass:[MKUserLocation class]]) {
+        return nil;
+    }
+    
+    if ([annotation isKindOfClass:[TicketPriceAnnotation class]]) {
+        static NSString *reuseIdentifier = @"TicketPriceView";
+        TicketPriceAnnotationView *annotationView =
+            (TicketPriceAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:reuseIdentifier];
+        if (annotationView == nil) {
+            annotationView = [[TicketPriceAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
+        }
+        annotationView.annotation = annotation;
+        
+        return annotationView;
+    }
+    
+    return nil;
+}
+
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id<MKOverlay>)overlay
 {
     if ([overlay isKindOfClass:[CMMutableCircle class]]) {

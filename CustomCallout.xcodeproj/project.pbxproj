@@ -25,6 +25,9 @@
 		845110BC167B0A46004BF287 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845110BB167B0A46004BF287 /* CoreLocation.framework */; };
 		845110BE167B0A4D004BF287 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845110BD167B0A4D004BF287 /* AddressBook.framework */; };
 		845110C2167B1829004BF287 /* userLocation.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 845110C1167B1829004BF287 /* userLocation.gpx */; };
+		84719F3A16804A2600433F5D /* TicketPriceAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84719F3916804A2600433F5D /* TicketPriceAnnotationView.m */; };
+		84719F3D16804D9C00433F5D /* TicketPriceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 84719F3C16804D9C00433F5D /* TicketPriceAnnotation.m */; };
+		84D0AE90168066A0008927F4 /* bg_price@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D0AE8F168066A0008927F4 /* bg_price@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +57,11 @@
 		845110BB167B0A46004BF287 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		845110BD167B0A4D004BF287 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		845110C1167B1829004BF287 /* userLocation.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = userLocation.gpx; sourceTree = "<group>"; };
+		84719F3816804A2600433F5D /* TicketPriceAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketPriceAnnotationView.h; sourceTree = "<group>"; };
+		84719F3916804A2600433F5D /* TicketPriceAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketPriceAnnotationView.m; sourceTree = "<group>"; };
+		84719F3B16804D9C00433F5D /* TicketPriceAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketPriceAnnotation.h; sourceTree = "<group>"; };
+		84719F3C16804D9C00433F5D /* TicketPriceAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketPriceAnnotation.m; sourceTree = "<group>"; };
+		84D0AE8F168066A0008927F4 /* bg_price@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_price@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +114,7 @@
 		8451109C167B08AB004BF287 /* CustomCallout */ = {
 			isa = PBXGroup;
 			children = (
+				84D0AE8E168066A0008927F4 /* images */,
 				845110A5167B08AB004BF287 /* AppDelegate.h */,
 				845110A6167B08AB004BF287 /* AppDelegate.m */,
 				845110AE167B08AB004BF287 /* MainStoryboard.storyboard */,
@@ -115,6 +124,10 @@
 				1C93B440167DCD6C00E4B791 /* CMMutableCircle.m */,
 				1C93B442167DCEA200E4B791 /* CMMutableCircleView.h */,
 				1C93B443167DCEA200E4B791 /* CMMutableCircleView.m */,
+				84719F3B16804D9C00433F5D /* TicketPriceAnnotation.h */,
+				84719F3C16804D9C00433F5D /* TicketPriceAnnotation.m */,
+				84719F3816804A2600433F5D /* TicketPriceAnnotationView.h */,
+				84719F3916804A2600433F5D /* TicketPriceAnnotationView.m */,
 				1C93B445167DD68000E4B791 /* MapKitUtil.h */,
 				1C93B446167DD68000E4B791 /* MapKitUtil.m */,
 				845110C1167B1829004BF287 /* userLocation.gpx */,
@@ -135,6 +148,14 @@
 				845110AC167B08AB004BF287 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		84D0AE8E168066A0008927F4 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				84D0AE8F168066A0008927F4 /* bg_price@2x.png */,
+			);
+			path = images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -194,6 +215,7 @@
 				845110AD167B08AB004BF287 /* Default-568h@2x.png in Resources */,
 				845110B0167B08AB004BF287 /* MainStoryboard.storyboard in Resources */,
 				845110C2167B1829004BF287 /* userLocation.gpx in Resources */,
+				84D0AE90168066A0008927F4 /* bg_price@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,6 +232,8 @@
 				1C93B441167DCD6C00E4B791 /* CMMutableCircle.m in Sources */,
 				1C93B444167DCEA200E4B791 /* CMMutableCircleView.m in Sources */,
 				1C93B447167DD68000E4B791 /* MapKitUtil.m in Sources */,
+				84719F3A16804A2600433F5D /* TicketPriceAnnotationView.m in Sources */,
+				84719F3D16804D9C00433F5D /* TicketPriceAnnotation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
