@@ -38,4 +38,9 @@
     self.label.text = @"Hello World";
     [self setNeedsDisplay];
 }
+- (IBAction)calloutButtonClick:(id)sender {
+    if ([self.mapView.delegate respondsToSelector:@selector(mapView:annotationView:calloutAccessoryControlTapped:)]) {
+        [self.mapView.delegate mapView:self.mapView annotationView:self calloutAccessoryControlTapped:self.accessory];
+    }
+}
 @end

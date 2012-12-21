@@ -110,6 +110,7 @@
             (TicketPriceCalloutAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:reuseIdentifier];
         if (annotationView == nil) {
             annotationView = [[TicketPriceCalloutAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
+            annotationView.mapView = self.mapView;
         }
         
         annotationView.annotation = annotation;
@@ -174,6 +175,12 @@
     [self.userCircleView invalidatePath];
 }
 
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Button Clicked" message:@"You click the button in the callout view"
+                                                       delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alertView show];
+}
 #pragma mark - LocationManagerDelegate -
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
