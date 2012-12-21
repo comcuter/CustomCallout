@@ -45,14 +45,16 @@
     MKCoordinateRegion viewRegion = MKCoordinateRegionMake(shenZhenCoordinate, MKCoordinateSpanMake(0.03, 0.03));
     self.mapView.region = [self.mapView regionThatFits:viewRegion];
     
-    // 添加几个点
+    // 添加几个普通的点,作为对照
     CLLocationCoordinate2D coordinates[] = {CLLocationCoordinate2DMake(22.548234, 113.939745),
-                                            CLLocationCoordinate2DMake(22.544487, 113.945668),
+                                            CLLocationCoordinate2DMake(22.538007, 113.945668),
                                             CLLocationCoordinate2DMake(22.524781, 113.94386)};
     NSMutableArray *annotations = [NSMutableArray array];
     for (int i = 0; i < sizeof(coordinates) / sizeof(coordinates[0]); i++) {
         MKPointAnnotation *pointAnnotation = [[MKPointAnnotation alloc] init];
         pointAnnotation.coordinate = coordinates[i];
+        pointAnnotation.title = @"Point Annotation Title";
+        pointAnnotation.subtitle = @"Point Annotation SubTitle";
         [annotations addObject:pointAnnotation];
     }
     [self.mapView addAnnotations:annotations];
@@ -105,7 +107,7 @@
     } else if ([annotation isKindOfClass:[TicketPriceCalloutAnnotation class]]) { // Callout 的 Annotation View
         static NSString *reuseIdentifier = @"TicketPriceCalloutView";
         TicketPriceCalloutAnnotationView *annotationView =
-        (TicketPriceCalloutAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:reuseIdentifier];
+            (TicketPriceCalloutAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:reuseIdentifier];
         if (annotationView == nil) {
             annotationView = [[TicketPriceCalloutAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
         }
@@ -113,7 +115,7 @@
         annotationView.annotation = annotation;
         return annotationView;
     }
-    
+    // 其他的 Annotation 都返回默认的 MKPinAnnotationView.
     return nil;
 }
 

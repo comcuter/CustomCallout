@@ -9,5 +9,6 @@
 #import "BaseCalloutView.h"
 
 @interface TicketPriceCalloutAnnotationView : BaseCalloutView
-
+@property (nonatomic, strong) IBOutlet UIView *contentView;
+@property (nonatomic, strong) IBOutlet UILabel *label;
 @end

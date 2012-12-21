@@ -27,6 +27,7 @@
 		845110C2167B1829004BF287 /* userLocation.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 845110C1167B1829004BF287 /* userLocation.gpx */; };
 		84719F3A16804A2600433F5D /* TicketPriceAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84719F3916804A2600433F5D /* TicketPriceAnnotationView.m */; };
 		84719F3D16804D9C00433F5D /* TicketPriceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 84719F3C16804D9C00433F5D /* TicketPriceAnnotation.m */; };
+		848168AD16840AAF00627D35 /* TicketPriceCalloutAnnotationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848168AC16840AAF00627D35 /* TicketPriceCalloutAnnotationView.xib */; };
 		8487EAF61681976B007AACB8 /* BaseCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8487EAF51681976B007AACB8 /* BaseCalloutView.m */; };
 		8487EAF91681A0D9007AACB8 /* bg_controlview@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8487EAF81681A0D9007AACB8 /* bg_controlview@2x.png */; };
 		8487EAFE1681A86F007AACB8 /* TicketPriceCalloutAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8487EAFD1681A86F007AACB8 /* TicketPriceCalloutAnnotation.m */; };
@@ -65,6 +66,7 @@
 		84719F3916804A2600433F5D /* TicketPriceAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketPriceAnnotationView.m; sourceTree = "<group>"; };
 		84719F3B16804D9C00433F5D /* TicketPriceAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TicketPriceAnnotation.h; sourceTree = "<group>"; };
 		84719F3C16804D9C00433F5D /* TicketPriceAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TicketPriceAnnotation.m; sourceTree = "<group>"; };
+		848168AC16840AAF00627D35 /* TicketPriceCalloutAnnotationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TicketPriceCalloutAnnotationView.xib; sourceTree = "<group>"; };
 		8487EAF41681976B007AACB8 /* BaseCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseCalloutView.h; sourceTree = "<group>"; };
 		8487EAF51681976B007AACB8 /* BaseCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseCalloutView.m; sourceTree = "<group>"; };
 		8487EAF81681A0D9007AACB8 /* bg_controlview@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_controlview@2x.png"; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				8487EAF51681976B007AACB8 /* BaseCalloutView.m */,
 				8487EAFF1681A8DA007AACB8 /* TicketPriceCalloutAnnotationView.h */,
 				8487EB001681A8DA007AACB8 /* TicketPriceCalloutAnnotationView.m */,
+				848168AC16840AAF00627D35 /* TicketPriceCalloutAnnotationView.xib */,
 				1C93B445167DD68000E4B791 /* MapKitUtil.h */,
 				1C93B446167DD68000E4B791 /* MapKitUtil.m */,
 				845110C1167B1829004BF287 /* userLocation.gpx */,
@@ -235,6 +238,7 @@
 				845110C2167B1829004BF287 /* userLocation.gpx in Resources */,
 				84D0AE90168066A0008927F4 /* bg_price@2x.png in Resources */,
 				8487EAF91681A0D9007AACB8 /* bg_controlview@2x.png in Resources */,
+				848168AD16840AAF00627D35 /* TicketPriceCalloutAnnotationView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

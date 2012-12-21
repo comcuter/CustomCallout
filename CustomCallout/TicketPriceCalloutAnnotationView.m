@@ -13,22 +13,29 @@
 {
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
     if (self) {
-        UIImage *bgImage = [UIImage imageNamed:@"bg_controlview"];
-        CGRect frame = self.frame;
-        frame.size = bgImage.size;
-        self.frame = frame;
-        NSLog(@"callout view frame:%@", NSStringFromCGRect(self.frame));
+        // 在此处设置内容区域的内容.
         
-        self.opaque = NO;
-        
-        self.centerOffset = CGPointMake(0, -80);
+        // contentHeight 的默认值.
+        self.contentHeight = 60;
+        [[NSBundle mainBundle] loadNibNamed:@"TicketPriceCalloutAnnotationView" owner:self options:nil];
+        self.contentView.frame = CGRectMake(10, 15, self.frame.size.width - 20, self.contentHeight);
+        //self.contentView.backgroundColor = [UIColor clearColor];
+        [self addSubview:self.contentView];
     }
     return self;
 }
 
-- (void)drawRect:(CGRect)rect
+- (void)setContentHeight:(float)contentHeight
 {
-    [[UIImage imageNamed:@"bg_controlview"] drawInRect:rect];
+    [super setContentHeight:contentHeight];
+    // 根据 contentHeight 来调整 contentView 的高度
+    self.contentView.frame = CGRectMake(10, 15, self.frame.size.width - 20, self.contentHeight);
 }
 
+- (void)setAnnotation:(id<MKAnnotation>)annotation
+{
+    [super setAnnotation:annotation];
+    self.label.text = @"Hello World";
+    [self setNeedsDisplay];
+}
 @end

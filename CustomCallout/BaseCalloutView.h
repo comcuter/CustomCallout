@@ -9,5 +9,7 @@
 #import <MapKit/MapKit.h>
 
 @interface BaseCalloutView : MKAnnotationView
+// BaseView 根据这个来相应调整背景的高度
+@property (nonatomic, assign) float contentHeight;
 
 @end
